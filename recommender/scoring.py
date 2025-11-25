@@ -9,6 +9,7 @@ from recommender.constants import (
     READ_TITLES_THEME_WEIGHT,
     MATCH_VS_INTERNAL_WEIGHT,
 )
+from utils.cleaning import json_load_feature_importances
 
 def compute_rating_affinities(manga_df, read_manga):
     
@@ -89,6 +90,30 @@ def score_row(row, cur_genres, cur_themes, hist_genres, hist_themes, total_hist_
 
         return total_score, used_current
 
+
+def compute_feature_score(row):
+    
+    json_dict = json_load_feature_importances()
+    score = 0.0
+
+    genres = set(row["genres"])
+    themes = set(row["themes"])
+    count = 0
+
+    for g in genres:
+        count += 1
+        score += float(json_dict.get(f"genre_{g}", 0))
+    
+    for t in themes:
+        count += 1
+        score += float(json_dict.get(f"theme_{t}", 0))
+
+    if count > 0:
+        score = score / count
+
+    return score
+    
+    
 def combine_scores(match_score, internal_score):
     
     if internal_score > 0:
@@ -120,6 +145,7 @@ def score_and_rank(filtered_df, manga_df, profile, current_genres, current_theme
 
     match_scores = []
     used_current_flags = []
+    feature_scores = []
     for _, row in df.iterrows():
         score, used_c = score_row(
             row,
@@ -132,8 +158,11 @@ def score_and_rank(filtered_df, manga_df, profile, current_genres, current_theme
             genre_affinity,
             theme_affinity
         )
+        fs = compute_feature_score(row)
+
         match_scores.append(score)
         used_current_flags.append(used_c)
+        feature_scores.append(fs)
 
 
     # Run the previous function 
@@ -141,6 +170,8 @@ def score_and_rank(filtered_df, manga_df, profile, current_genres, current_theme
 
     # Make a df for the internal score from the database
     df["internal_score"] = pd.to_numeric(df.get("score", 0), errors = "coerce").fillna(0).mul(0.1).round(3)
+
+    df["feature_score"] = feature_scores
 
     used_current = any(used_current_flags)
 

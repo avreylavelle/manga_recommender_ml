@@ -103,6 +103,11 @@ def add_manga_rating(profile, df, title_lookup):
             break
         requested_lower = requested_title.lower() # make lower (for matching
 
+        # NEED TO ADD
+        # USE SYNONYMS IN THIS SECTION
+        # NEED TO ADD
+
+
         if requested_lower in title_lookup: # matching
             chosen_title = title_lookup[requested_lower] # matches, move on
         else:

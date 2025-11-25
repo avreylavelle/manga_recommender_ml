@@ -31,8 +31,10 @@ def ui_collect_current_preferences(profile, manga_df):
     print("\nAvailable Themes:")
     print(", ".join(get_all_unique(manga_df, "themes")))
     t = input("Enter themes (comma-separated): ")
-
+    
     current_themes = [x.strip() for x in t.split(",") if x.strip()]
+
+    print(",  ".join(get_all_unique(manga_df, "item_type")))
 
     # Update running counts
     for g in current_genres:
@@ -79,6 +81,7 @@ def ui_recommend(manga_df, user_df, profile):
         print("Internal Score:", row["internal_score"])
         print("Match Score:", round(row["match_score"], 3))
         print("Combined Score: ", round(row["combined_score"], 3))
+        print("Feature Score: ", round(row["feature_score"], 3))
         # print("Publishing Date:", row.get("publishing_date", "Unknown"))
         # print("Status:", row.get("status", "Unknown_print")) # Finished, Publishing
         print()

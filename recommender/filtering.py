@@ -14,6 +14,7 @@ def filter_nsfw(df, profile):
         )]
         
     return df
+
 def parse_lists(df):
     df = df.copy()
 
@@ -48,6 +49,10 @@ def publish_date_filter(df):
             return True
         
     return df[df["publishing_date"].apply(keep_row)]
+
+def filter_item_type():
+    # Doujinshi,  Light Novel,  Manga,  Manhua,  Manhwa,  Novel,  One-shot
+    pass
 
 def run_filters(manga_df, profile):
     """Apply all filtering steps."""
