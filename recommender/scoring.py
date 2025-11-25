@@ -92,8 +92,10 @@ def score_row(row, cur_genres, cur_themes, hist_genres, hist_themes, total_hist_
 
 
 def compute_feature_score(row):
-    
-    json_dict = json_load_feature_importances()
+    try:
+        json_dict = json_load_feature_importances()
+    except:
+        return 0
     score = 0.0
 
     genres = set(row["genres"])

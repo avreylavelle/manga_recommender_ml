@@ -9,8 +9,8 @@ def get_ml_train_test_split(test_size=0.2, random_state=42):
 
     y = df["score"].astype(float)
 
-    # X = df.drop(columns=["id", "score", "scored_by", "ranked", "popularity", "members", "favorited"])
-    X = df.drop(columns=["id", "score"])
+    X = df.drop(columns=["id", "score", "scored_by", "ranked", "popularity", "members", "favorited"])
+    # X = df.drop(columns=["id", "score"])
     
     X = X.fillna(0)
  
