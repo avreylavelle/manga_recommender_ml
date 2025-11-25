@@ -141,11 +141,16 @@ def load_ml_featureset(TESTER_PATH=TESTER_PATH, ML_PATH=ML_PATH):
     
     return df
     
-def to_json_feature_importances(my_dict, output_path=FT_IMP_PATH):
+def to_json_feature_importances(feature_dict, output_path=FT_IMP_PATH):
 
     # Save
     with open(output_path, 'w') as f:
-        json.dump(my_dict, f)
+        json.dump(feature_dict, f)
+
+    with open(output_path, 'r') as f:
+        tmp = json.load(f)
+
+    return tmp
 
 def json_load_feature_importances(input_path=FT_IMP_PATH):
     # Load
@@ -158,5 +163,4 @@ def json_load_feature_importances(input_path=FT_IMP_PATH):
 
 #     ml_dataset = initialize_ml_dataset(load_ml_data(ML_PATH))
 #     ml_dataset.to_csv(TESTER_PATH, index=False)
-#     from Dataset import load_ml_data
 #     df = pd.read_csv(TESTER_PATH)

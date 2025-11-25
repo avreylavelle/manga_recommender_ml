@@ -9,7 +9,8 @@ def get_ml_train_test_split(test_size=0.2, random_state=42):
 
     y = df["score"].astype(float)
 
-    X = df.drop(columns=["id", "score", "scored_by", "ranked", "popularity", "members", "favorited"])
+    # X = df.drop(columns=["id", "score", "scored_by", "ranked", "popularity", "members", "favorited"])
+    X = df.drop(columns=["id", "score"])
     
     X = X.fillna(0)
  
@@ -50,20 +51,23 @@ def get_feature_importances(model, X, top_n=50):
 
     print(f"\n--- Top {top_n} Feature Importances ---")
     for name, importance in sorted_pairs:
-        if len(my_dict) <= top_n:
-            print(f"{len(my_dict)}. {name}: {importance:.3f}")
+        if len(my_dict) < top_n:
+            print(f"{len(my_dict) + 1}. {name}: {importance:.3f}")
         my_dict[name] = float(importance.round(3))
+        
+    to_json_feature_importances(my_dict)
 
-    # reveresed_sorted_pairs = sorted(zip(feature_names, importances), key=lambda x: x[1])
-
-    # print(f"\n--- Bottom {top_n} Feature Importances ---")
-    # for name, importance in reveresed_sorted_pairs[:top_n]:
-    #     print(f"{name}: {importance:.6f}")
-
+    return
+    
 def run_random_forest_feature_importance():
     X_train, X_test, y_train, y_test = get_ml_train_test_split()
 
     model, preds = train_random_forest_regressor(X_train, y_train, X_test, y_test)
 
     get_feature_importances(model, X_train, top_n=50)
+
+    return
+
+if __name__== "__main__":
+    run_random_forest_feature_importance()
 
